@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reliable Hub's - Space Management Solutions</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ================= RESET & BASE ================= */
+        * {
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins', sans-serif;
+        }
+
+        body {
+            background:#fff;
+            overflow-x:hidden;
+            color: #333;
+        }
+
+        h2 { font-size: 36px; font-weight: 700; margin-bottom: 20px; }
+        p { line-height: 1.6; color: #666; font-size: 15px; }
+
+        /* ================= NAVBAR ================= */
+        header { position: fixed; width: 100%; top: 0; left: 0; z-index: 1000; }
+        .navbar {
+            display:flex; justify-content:space-between; align-items:center;
+            height:100px; padding:0 60px; background:rgba(255,255,255,0.85);
+            backdrop-filter:blur(8px); border-bottom:1px solid rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .left-nav, .right-nav { display: flex; align-items: center; gap: 20px; }
+        .logo img { max-height: 60px; }
+        .divider { height: 40px; width: 1px; background: #ddd; }
+
+        /* SEARCH ICON STYLING */
+        .search-icon-img {
+            width: 20px; 
+            height: auto;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .search-icon-img:hover {
+            transform: scale(1.1);
+        }
+
+        /* ================= PRODUCT DROPDOWN ================= */
+        .product-wrapper {
+            position: relative;
+            cursor: pointer;
+            padding: 10px 0;
+        }
+        .product-trigger {
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .product-wrapper:hover .product-trigger {
+            color: #e67e22;
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 250px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: 0.3s ease;
+            list-style: none;
+            padding: 15px 0;
+        }
+        .product-wrapper:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .dropdown-menu li {
+            position: relative;
+            padding: 12px 25px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .dropdown-menu li:hover {
+            background: #fdf2e9;
+            color: #e67e22;
+        }
+        .sub-dropdown {
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(10px);
+            transition: 0.3s ease;
+            list-style: none;
+            padding: 10px 0;
+        }
+        .dropdown-menu li:hover .sub-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        /* ================= SHARED DRAWER STYLES ================= */
+        .side-drawer {
+            position: fixed;
+            top: 0;
+            height: 100%;
+            width: 450px;
+            background: white;
+            z-index: 3000;
+            transition: 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+            display: flex;
+            flex-direction: column;
+            padding: 100px 60px;
+        }
+        #sideDrawer { left: -100%; box-shadow: 10px 0 30px rgba(0,0,0,0.1); }
+        #sideDrawer.active { left: 0; }
+        #contactDrawer { right: -100%; box-shadow: -10px 0 30px rgba(0,0,0,0.1); }
+        #contactDrawer.active { right: 0; }
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(3px);
+            z-index: 2500;
+            display: none;
+        }
+        .menu-overlay.active { display: block; }
+        .side-drawer ul { list-style: none; }
+        .side-drawer ul li { font-size: 28px; font-weight: 600; margin-bottom: 30px; cursor: pointer; transition: 0.3s; }
+        .side-drawer ul li:hover { color: #e67e22; padding-left: 10px; }
+        .drawer-title { font-size: 30px; font-weight: 700; color: #e67e22; margin-bottom: 30px; }
+        .contact-info-box { margin-bottom: 25px; }
+        .contact-info-box h4 { font-size: 14px; text-transform: uppercase; color: #999; margin-bottom: 5px; letter-spacing: 1px; }
+        .contact-info-box p { font-size: 16px; color: #333; font-weight: 500; }
+
+        /* ================= HERO ================= */
+        .hero {
+            height:100vh;
+            background:url("uploads/Home Banner 2.png") center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            padding-left: 160px;
+            padding-bottom: 190px;
+        }
+        .hero-content h1 {
+            font-size: 56px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.1;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+        }
+
+        /* ================= QUICK LINKS ================= */
+        .quick-section { padding: 60px 40px; background: #fff; position: relative; z-index: 5; }
+        .cards { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+        .card { position:relative; overflow:hidden; border-radius: 4px; transition: transform 0.4s ease; cursor: pointer; }
+        .card:hover { transform: translateY(-10px); }
+        .card img { width:100%; height:400px; object-fit:cover; transition:0.6s; }
+        .card:hover img { transform: scale(1.1); }
+        
+        .overlay {
+            position:absolute; bottom:0; left:0; width:100%; padding:20px;
+            background:linear-gradient(to top, rgba(0,0,0,0.8), transparent); 
+            color:white; display: flex; flex-direction: column; align-items: flex-start; gap: 1px;
+        }
+        .icon-box img { width: 45px; height: auto; margin-bottom: 5px; filter: brightness(0) invert(1); }
+        .overlay h3 { font-weight: 600; font-size: 20px; line-height: 1.2; max-width: 200px; }
+
+        /* ================= WELCOME SECTION ================= */
+        .welcome-section { text-align: center; padding: 80px 10%; background: #fff; position: relative; z-index: 5;}
+        .welcome-section h2 { color: #e67e22; }
+        .read-more-btn {
+            margin-top: 20px; padding: 10px 25px; border: 1px solid #e67e22;
+            background: transparent; cursor: pointer; font-size: 13px;
+            transition: 0.3s ease;
+        }
+        .read-more-btn:hover { background: #e67e22; color: white; }
+
+        /* ================= VIDEO SECTION ================= */
+        .video-container { width: 100%; max-width: 1000px; margin: 0 auto 80px; position: relative; cursor: pointer; overflow: hidden; z-index: 5;}
+        .video-container img { width: 100%; display: block; transition: 0.5s; }
+        .video-container:hover img { transform: scale(1.02); }
+        .play-btn {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 90px; height: 90px; background: rgba(219, 218, 218, 0.9);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            transition: 0.3s;
+        }
+
+        /* ================= EXPERTS BANNER ================= */
+        .experts-banner {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('uploads/Rectangle 9.png');
+            background-size: cover; background-attachment: fixed;
+            padding: 100px 60px; color: white; position: relative; z-index: 5;
+        }
+        .contact-btn {
+            background: #e67e22; color: white; padding: 12px 30px; border: none;
+            font-weight: 600; cursor: pointer; transition: 0.3s;
+        }
+
+        /* ================= ACHIEVEMENTS ================= */
+        .achievements-section { background: #fff; padding-bottom: 80px; position: relative; z-index: 5;}
+        .achievements-header {
+            background: #cccccc; height: 150px; display: flex;
+            align-items: flex-end; justify-content: start; padding-left: 10%;
+        }
+        .achievements-header h2 { font-size: 90px; font-weight: 800; color: #fff; margin-bottom: -35px; letter-spacing: -2px; }
+        .achievements-content { position: relative; max-width: 1100px; margin: 80px auto; height: 450px; }
+        .vertical-axis { position: absolute; left: 50%; top: 0; width: 2px; height: 100%; background: #27ae60; }
+        .stat-box { position: absolute; display: flex; align-items: center; width: 48%; transition: 0.5s; }
+        .orange-text { color: #f39c12; font-size: 28px; font-weight: 700; display: block; }
+        .stat-data p { font-size: 16px; color: #000000; font-weight: 500; }
+        .connector-line { width: 50px; height: 1.5px; background: #27ae60; }
+        .top-left { top: 10%; left: 0; justify-content: flex-end; text-align: right; }
+        .middle-right { top: 40%; left: 50%; justify-content: flex-start; text-align: left; }
+        .bottom-left { top: 75%; left: 0; justify-content: flex-end; text-align: right; }
+
+        /* ================= OVERLAP FEATURE (STICKY) ================= */
+        .overlap-wrapper { position: relative; }
+        .manufacturing { 
+            background: #e67e22; color: #fff; padding: 100px 10% !important; 
+            position: sticky; top: 0; z-index: 1; height: 100vh; display: flex; align-items: center;
+        }
+        .specialization { 
+            background: #333; color: white; padding: 100px 10% !important; 
+            position: relative; z-index: 2; box-shadow: 0px -20px 40px rgba(0,0,0,0.3);
+        }
+        .inner-large-title { font-size: 80px; font-weight: 800; color: #fff; line-height: 1; margin-bottom: 40px; letter-spacing: -2px; }
+        .intro-text { color: #000000; max-width: 850px; margin-bottom: 60px; font-size: 14px; opacity: 0.9; }
+        .excellence-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 80px; row-gap: 50px; }
+        .grid-item { display: flex; gap: 25px; transition: 0.3s; }
+        .grid-icon-img { width: 50px; height: 50px; object-fit: contain; filter: brightness(0) invert(1); }
+        .title-underline { width: 100%; height: 1.5px; background: rgba(8, 198, 17, 0.4); margin-bottom: 12px; }
+        .grid-content p{ color: #000000; }
+        .spec-intro { margin-bottom: 40px; color: #ffffff; }
+        .spec-list .grid-content p{ color: #ffffff; }
+        .spec-content { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+        .spec-image img { width: 100%; border-radius: 4px; transition: 0.5s; }
+        .feature-item { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 30px; }
+        .spec-icon { width: 40px; filter: brightness(0) invert(1); }
+
+        /* ================= CLIENTS & FOOTER ================= */
+        .clients-header { background: #e5e5e5; height: 180px; display: flex; align-items: flex-end; padding-left: 10%; position: relative; z-index: 3;}
+        .clients-header h2 { font-family: 'Lato', sans-serif; font-size: 100px; font-weight: 900; color: #fff; margin-bottom: -20px; }
+        .clients { padding: 80px 60px; text-align: center; background: #fff; position: relative; z-index: 3;}
+        .client-logos { display: flex; justify-content: center; align-items: center; gap: 100px; flex-wrap: wrap; }
+        .client-logos img { max-height: 50px; filter: grayscale(1); transition: 0.3s; cursor: pointer; }
+        .client-logos img:hover { filter: grayscale(0); transform: scale(1.1); }
+        footer { background: #222; color: #ffffff; padding: 60px; display: grid; grid-template-columns: 2fr 1fr 1.5fr; gap: 40px; font-size: 13px; position: relative; z-index: 3;}
+        footer h4 { color: #fff; margin-bottom: 20px; }
+        footer ul { list-style: none; }
+        footer ul li { margin-bottom: 10px; cursor: pointer; transition: 0.3s; }
+        .footer-contact-item { display: flex; align-items: center; gap: 15px; }
+        .footer-icon-img { width: 22px; height: auto; }
+
+
+        /* ================= ADDED RESPONSIVENESS ================= */
+        @media (max-width: 1200px) {
+            .navbar { padding: 0 30px; }
+            .hero { padding-left: 60px; }
+            .inner-large-title { font-size: 60px; }
+            .achievements-header h2 { font-size: 70px; }
+            .clients-header h2 { font-size: 80px; }
+        }
+
+        @media (max-width: 992px) {
+            .cards { grid-template-columns: repeat(2, 1fr); }
+            .excellence-grid { grid-template-columns: 1fr; gap: 30px; }
+            .spec-content { grid-template-columns: 1fr; }
+            footer { grid-template-columns: 1fr 1fr; }
+            .manufacturing { height: auto; position: relative; padding: 60px 5% !important; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar { height: 80px; padding: 0 20px; }
+            .logo img { max-height: 45px; }
+            .divider { display: none; }
+            .hero { padding-left: 20px; padding-bottom: 100px; }
+            .hero-content h1 { font-size: 36px; }
+            
+            .achievements-header { height: 100px; }
+            .achievements-header h2 { font-size: 40px; margin-bottom: -15px; }
+            .achievements-content { height: auto; display: flex; flex-direction: column; gap: 30px; align-items: center; }
+            .vertical-axis, .connector-line { display: none; }
+            .stat-box { position: static; width: 100%; justify-content: center; text-align: center; }
+            
+            .inner-large-title { font-size: 40px; text-align: center; }
+            .intro-text { text-align: center; }
+            
+            .clients-header { height: 100px; }
+            .clients-header h2 { font-size: 50px; margin-bottom: -10px; }
+            .client-logos { gap: 40px; }
+            
+            footer { grid-template-columns: 1fr; text-align: center; padding: 40px 20px; }
+            .footer-contact-item { justify-content: center; }
+            
+            .side-drawer { width: 100%; padding: 60px 30px; }
+        }
+
+        @media (max-width: 480px) {
+            .cards { grid-template-columns: 1fr; }
+            .hero-content h1 { font-size: 28px; }
+            .welcome-section { padding: 40px 5%; }
+            .video-container { margin-bottom: 40px; }
+            .experts-banner { padding: 60px 20px; }
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <nav class="navbar">
+        <div class="left-nav">
+            <span onclick="openMenu()" style="cursor:pointer">☰ MENU</span>
+            <div class="divider"></div>
+            <div class="product-wrapper">
+                <span class="product-trigger">PRODUCT ▼</span>
+                <ul class="dropdown-menu">
+                    <li>Warehouse Storage
+                        <ul class="sub-dropdown">
+                            <li>Heavy Duty Racks</li>
+                            <li>Pallet Racking</li>
+                            <li>Mezzanine Floors</li>
+                        </ul>
+                    </li>
+                    <li>Retail Solutions
+                        <ul class="sub-dropdown">
+                            <li>Display Racks</li>
+                            <li>Shopping Trolleys</li>
+                            <li>Cash Counters</li>
+                        </ul>
+                    </li>
+                    <li>Data Centre Racks</li>
+                    <li>Office Furniture</li>
+                </ul>
+            </div>
+        </div>
+        <div class="logo">
+            <img src="uploads/Reliable-Hubs-New-Logo-PNG-File-1.png" alt="Logo">
+        </div>
+        <div class="right-nav">
+            <img src="uploads/search-logo.png" alt="Search" class="search-icon-img">
+            <div class="divider"></div>
+            <span onclick="openContact()" style="cursor:pointer">CONTACT US</span>
+        </div>
+    </nav>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1 data-aos="fade-up" data-aos-duration="2000" data-aos-once="false">ENGINEERING THE <br>FUTURE OF STORAGE</h1>
+    </div>
+</section>
+
+<section class="quick-section">
+    <div class="cards">
+        <div class="card" data-aos="fade-up" data-aos-delay="100">
+            <img src="uploads/Rectangle 1.png">
+            <div class="overlay">
+                <div class="icon-box"><img src="uploads/Isolation_Mode-1.png" alt="Icon"></div>
+                <h3>Warehouse Storage Solutions</h3>
+            </div>
+        </div>
+        <div class="card" data-aos="fade-up" data-aos-delay="200">
+            <img src="uploads/Rectangle 2.png">
+            <div class="overlay">
+                <div class="icon-box"><img src="uploads/Isolation_Mode-2.png" alt="Icon"></div>
+                <h3>Retail Solutions</h3>
+            </div>
+        </div>
+        <div class="card" data-aos="fade-up" data-aos-delay="300">
+            <img src="uploads/Rectangle 3.png">
+            <div class="overlay">
+                <div class="icon-box"><img src="uploads/Isolation_Mode-3.png" alt="Icon"></div>
+                <h3>Data Centre</h3>
+            </div>
+        </div>
+        <div class="card" data-aos="fade-up" data-aos-delay="400">
+            <img src="uploads/Rectangle 4.png">
+            <div class="overlay">
+                <div class="icon-box"><img src="uploads/Isolation_Mode-4.png" alt="Icon"></div>
+                <h3>Furniture's</h3>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="welcome-section" data-aos="fade-up">
+    <h2>Welcome to the Reliable HUB'S</h2>
+    <p>Reliable HUB’s Engineering (India) Pvt. Ltd. has over 25 years of extensive experience in the industry which provides One-Stop solutions for the supply of Warehouse Storage Systems, Shelving Systems, Shopping Trolleys, Server Racks and many more such products.</p>
+    <br>
+    <p>Our customer centric approach and vast experience gathered over decades empowers us to offer unique customised storage solutions to all our clients.</p>
+    <button class="read-more-btn">Read More</button>
+</section>
+
+<div class="video-container" data-aos="zoom-in">
+    <img src="uploads/video-banner.png" alt="Video Thumbnail">
+    <div class="play-btn">▶</div>
+</div>
+
+<section class="experts-banner">
+    <div data-aos="fade-up">
+        <h2>We are the Experts in Space <br>Management Solutions <br>Across Industries.</h2>
+        <button class="contact-btn">Contact Us</button>
+    </div>
+</section>
+
+<section class="achievements-section">
+    <div class="achievements-header" data-aos="fade-right">
+        <h2>Our Achievements</h2>
+    </div>
+    <div class="achievements-content">
+        <svg class="diagonal-bg" viewBox="0 0 1000 400" style="position:absolute; width:100%; height:100%;">
+            <line x1="0" y1="300" x2="400" y2="0" stroke="#2ecc71" stroke-width="1.5" opacity="0.4"/>
+            <line x1="1000" y1="100" x2="800" y2="400" stroke="#2ecc71" stroke-width="1.5" opacity="0.4"/>
+        </svg>
+        <div class="vertical-axis"></div>
+        <div class="stat-box top-left" data-aos="fade-right">
+            <div class="stat-data"><span class="orange-text">15,000+</span><p>Installations Completed</p></div>
+            <div class="connector-line"></div>
+        </div>
+        <div class="stat-box middle-right" data-aos="fade-left">
+            <div class="connector-line"></div>
+            <div class="stat-data"><span class="orange-text">500,000 + sq.ft.</span><p>Size of Facility We Cater to</p></div>
+        </div>
+        <div class="stat-box bottom-left" data-aos="fade-right">
+            <div class="stat-data"><span class="orange-text">5,000,000 + sq.ft.</span><p>Space Covered With Our Products</p></div>
+            <div class="connector-line"></div>
+        </div>
+    </div>
+</section>
+
+<div class="overlap-wrapper">
+    <section class="manufacturing">
+        <div class="container">
+            <h2 class="inner-large-title" data-aos="fade-down">Manufacturing Excellence</h2>
+            <p class="intro-text" data-aos="fade-up">
+                Our factory is equipped with state-of-the-art machinery and automation systems that enhance production efficiency which allows us to scale operations quickly and effectively.
+            </p>
+
+            <div class="excellence-grid">
+                <div class="grid-item" data-aos="fade-up" data-aos-delay="100">
+                    <img src="uploads/Layer_1.png" class="grid-icon-img" alt="Technology">
+                    <div class="grid-content">
+                        <h4>Cutting-edge Technology</h4>
+                        <div class="title-underline"></div>
+                        <p>Utilizes the latest manufacturing technologies for superior output.</p>
+                    </div>
+                </div>
+                <div class="grid-item" data-aos="fade-up" data-aos-delay="200">
+                    <img src="uploads/Layer_1-2.png" class="grid-icon-img" alt="R&D">
+                    <div class="grid-content">
+                        <h4>Innovative R&D Department</h4>
+                        <div class="title-underline"></div>
+                        <p>Dedicated to developing cost-effective automation solutions and products.</p>
+                    </div>
+                </div>
+                <div class="grid-item" data-aos="fade-up" data-aos-delay="300">
+                    <img src="uploads/Layer_1-3.png" class="grid-icon-img" alt="Workforce">
+                    <div class="grid-content">
+                        <h4>Skilled Workforce</h4>
+                        <div class="title-underline"></div>
+                        <p>Employs highly trained personnel ensuring quality and efficiency.</p>
+                    </div>
+                </div>
+                <div class="grid-item" data-aos="fade-up" data-aos-delay="400">
+                    <img src="uploads/Layer_1-4.png" class="grid-icon-img" alt="Materials">
+                    <div class="grid-content">
+                        <h4>Quality Raw Materials</h4>
+                        <div class="title-underline"></div>
+                        <p>Sourced from world-class steel manufacturers for durability and strength.</p>
+                    </div>
+                </div>
+                <div class="grid-item" data-aos="fade-up" data-aos-delay="500">
+                    <img src="uploads/Layer_1-5.png" class="grid-icon-img" alt="Precision">
+                    <div class="grid-content">
+                        <h4>Precision Production Lines</h4>
+                        <div class="title-underline"></div>
+                        <p>Fully automatic lines guarantee high precision and flexibility.</p>
+                    </div>
+                </div>
+                <div class="grid-item" data-aos="fade-up" data-aos-delay="600">
+                    <img src="uploads/Layer_1-6.png" class="grid-icon-img" alt="Coating">
+                    <div class="grid-content">
+                        <h4>State-of-the-Art Coating</h4>
+                        <div class="title-underline"></div>
+                        <p>Features a modern automatic conveyorized powder coating plant.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="specialization">
+        <h2 class="inner-large-title" data-aos="fade-right">OUR SPECIALIZATION</h2>
+        <p class="spec-intro" data-aos="fade-up">Reliable Hub’s specializes in providing Tailored solutions as per the specific<br> sector requirement or the client’s requirements.</p>
+        
+        <div class="spec-content">
+            <div class="spec-image" data-aos="zoom-in-right">
+                <img src="uploads/Rectangle 13.png" alt="Interior">
+            </div>
+            <div class="spec-list">
+                <div class="feature-item" data-aos="fade-left" data-aos-delay="100">
+                    <img src="uploads/Layer_1 2.png" class="spec-icon">
+                    <div class="grid-content">
+                        <h4>Innovative Storage Solutions</h4>
+                        <div class="title-underline" style="background: #f39c12;"></div>
+                        <p>Our mission is to create unique storage solutions that adapt to any need.</p>
+                    </div>
+                </div>
+                <div class="feature-item" data-aos="fade-left" data-aos-delay="200">
+                    <img src="uploads/Layer_1-8.png" class="spec-icon">
+                    <div class="grid-content">
+                        <h4>Quality as a Core Value</h4>
+                        <div class="title-underline" style="background: #f39c12;"></div>
+                        <p>Quality is integral to our operations, ensuring top-notch storage solutions.</p>
+                    </div>
+                </div>
+                <div class="feature-item" data-aos="fade-left" data-aos-delay="300">
+                    <img src="uploads/Layer_1-9.png" class="spec-icon">
+                    <div class="grid-content">
+                        <h4>Expertise in Design</h4>
+                        <div class="title-underline" style="background: #f39c12;"></div>
+                        <p>Our team combines international storage concepts with extensive research.</p>
+                    </div>
+                </div>
+                <div class="feature-item" data-aos="fade-left" data-aos-delay="400">
+                    <img src="uploads/Layer_1-10.png" class="spec-icon">
+                    <div class="grid-content">
+                        <h4>World-Class Facilities</h4>
+                        <div class="title-underline" style="background: #f39c12;"></div>
+                        <p>We leverage advanced design and manufacturing facilities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="clients-header" data-aos="fade-up">
+    <h2>Our Clients</h2>
+</div>
+
+<section class="clients">
+    <div class="client-logos">
+        <img src="uploads/Croma-1 1.png" alt="Croma" data-aos="zoom-in" data-aos-delay="100">
+        <img src="uploads/Mr-DIY-1 1.png" alt="Mr DIY" data-aos="zoom-in" data-aos-delay="200">
+        <img src="uploads/Merwans-1 1.png" alt="Mevans" data-aos="zoom-in" data-aos-delay="300">
+        <img src="uploads/Reliance-Jio-1 1.png" alt="Jio" data-aos="zoom-in" data-aos-delay="400">
+        <img src="uploads/Reliance-Retail-1 1.png" alt="Reliance" data-aos="zoom-in" data-aos-delay="500">
+    </div>
+</section>
+
+<footer data-aos="fade-up">
+    <div>
+        <img src="uploads/footer-logo.png" alt="Logo" style="max-height: 50px; margin-bottom: 20px;">
+        <p style="color: #ffffff;">Reliable HUB’S is a dynamic organization with three decades of history and experience in the retailing industry.</p>
+    </div>
+    <div>
+        <h4>Quick Links</h4>
+        <ul>
+            <li>Home</li>
+            <li>About</li>
+            <li>Services</li>
+            <li>Careers</li>
+        </ul>
+    </div>
+    <div>
+        <h4>Locate Us</h4>
+        <p>Reliable Hub's Engineering (India) Pvt. Ltd. Plot No. K-7/1/1, MIDC Additional, Ambernath (East)- 421501.</p>
+        <br>
+        <div class="footer-contact-item">
+            <img src="uploads/phone-logo.png" class="footer-icon-img" alt="Phone">
+            <p>+91 251 - 2621145 / 2621146</p>
+        </div>
+        <br>
+        <div class="footer-contact-item">
+            <img src="uploads/email-logo.png" class="footer-icon-img" alt="Email">
+            <p>sales@reliablehubs.com</p>
+        </div>
+    </div>
+</footer>
+
+<div class="menu-overlay" id="menuOverlay" onclick="closeAll()"></div>
+
+<div class="side-drawer" id="sideDrawer">
+    <div class="close-btn" onclick="closeAll()" style="position:absolute; top:40px; right:40px; cursor:pointer; font-size:30px;">✕</div>
+    <ul>
+        <li onclick="closeAll()">Home</li>
+        <li onclick="closeAll()">About Us</li>
+        <li onclick="closeAll()">Products</li>
+        <li onclick="closeAll()">Contact</li>
+    </ul>
+</div>
+
+<div class="side-drawer" id="contactDrawer">
+    <div class="close-btn" onclick="closeAll()" style="position:absolute; top:40px; left:40px; cursor:pointer; font-size:30px;">✕</div>
+    <h3 class="drawer-title">Get in Touch</h3>
+    <div class="contact-info-box">
+        <h4>Call Us</h4>
+        <p>+91 251 - 2621145</p>
+    </div>
+    <div class="contact-info-box">
+        <h4>Email Us</h4>
+        <p>sales@reliablehubs.com</p>
+    </div>
+    <div class="contact-info-box">
+        <h4>Visit Us</h4>
+        <p>Plot No. K-7/1/1, MIDC Additional, Ambernath (East)- 421501.</p>
+    </div>
+    <button class="contact-btn" style="width: 100%; margin-top: 20px;">Send a Message</button>
+</div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script>
+    AOS.init({ duration: 1000, once: true, offset: 100 });
+
+    function openMenu() {
+        document.getElementById("sideDrawer").classList.add("active");
+        document.getElementById("menuOverlay").classList.add("active");
+        document.body.style.overflow = "hidden";
+    }
+
+    function openContact() {
+        document.getElementById("contactDrawer").classList.add("active");
+        document.getElementById("menuOverlay").classList.add("active");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeAll() {
+        document.getElementById("sideDrawer").classList.remove("active");
+        document.getElementById("contactDrawer").classList.remove("active");
+        document.getElementById("menuOverlay").classList.remove("active");
+        document.body.style.overflow = "auto";
+    }
+</script>
+
+</body>
+</html>
