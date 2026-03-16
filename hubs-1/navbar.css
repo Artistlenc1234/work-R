@@ -1,0 +1,315 @@
+header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100px;
+    padding: 0 60px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.left-nav,
+.right-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo img {
+    max-height: 60px;
+}
+
+.divider {
+    height: 40px;
+    width: 1px;
+    background: #ddd;
+}
+
+.menu-trigger,
+.product-trigger,
+.contact-link {
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    padding: 5px 0;
+}
+
+.menu-trigger:focus,
+.product-trigger:focus,
+.contact-link:focus {
+    outline: 2px solid #e67e22;
+    outline-offset: 2px;
+}
+
+.product-wrapper {
+    position: relative;
+}
+
+.product-wrapper[data-open="true"] .product-trigger,
+.product-wrapper .product-trigger:hover {
+    color: #e67e22;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    min-width: 250px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: 0.3s ease;
+    list-style: none;
+    padding: 15px 0;
+    z-index: 10;
+}
+
+.product-wrapper[data-open="true"] .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-menu li {
+    position: relative;
+    padding: 12px 25px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdown-label {
+    display: block;
+    color: #333;
+    text-decoration: none;
+}
+
+.dropdown-menu li:hover .dropdown-label {
+    color: #e67e22;
+}
+
+.sub-dropdown {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background: white;
+    min-width: 200px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(10px);
+    transition: 0.3s ease;
+    list-style: none;
+    padding: 10px 0;
+}
+
+.dropdown-menu li:hover .sub-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.sub-dropdown li {
+    padding: 6px 20px;
+    font-size: 13px;
+}
+
+.sub-sub-dropdown {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background: white;
+    min-width: 220px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(10px);
+    transition: 0.3s ease;
+    list-style: none;
+    padding: 8px 0;
+}
+
+.sub-dropdown li:hover .sub-sub-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.sub-dropdown a,
+.dropdown-label {
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+}
+
+.search-icon-img {
+    width: 20px;
+    height: auto;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.search-icon-img:hover {
+    transform: scale(1.1);
+}
+
+.side-drawer {
+    position: fixed;
+    top: 0;
+    height: 100%;
+    width: 450px;
+    background: white;
+    z-index: 3000;
+    transition: 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+    display: flex;
+    flex-direction: column;
+    padding: 100px 60px;
+    overflow-y: auto;
+}
+
+#sideDrawer {
+    left: -100%;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
+}
+
+#sideDrawer.active {
+    left: 0;
+}
+
+#contactDrawer {
+    right: -100%;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+}
+
+#contactDrawer.active {
+    right: 0;
+}
+
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(3px);
+    z-index: 2500;
+    display: none;
+}
+
+.menu-overlay.active {
+    display: block;
+}
+
+.side-drawer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.side-drawer ul li {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.side-drawer ul li:hover {
+    color: #e67e22;
+    padding-left: 10px;
+}
+
+.drawer-title {
+    font-size: 30px;
+    font-weight: 700;
+    color: #e67e22;
+    margin-bottom: 30px;
+}
+
+.contact-info-box {
+    margin-bottom: 25px;
+}
+
+.contact-info-box h4 {
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.contact-info-box p {
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+}
+
+.close-btn {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    cursor: pointer;
+    font-size: 30px;
+    background: none;
+    border: none;
+}
+
+#contactDrawer .close-btn {
+    right: auto;
+    left: 40px;
+}
+
+.menu-trigger,
+.contact-link,
+.close-btn {
+    font-family: inherit;
+}
+
+@media (max-width: 1024px) {
+    .navbar {
+        padding: 0 30px;
+    }
+
+    .side-drawer {
+        width: 85%;
+        padding: 80px 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0 20px;
+        height: 92px;
+    }
+
+    .left-nav,
+    .right-nav {
+        gap: 12px;
+    }
+
+    .product-wrapper .dropdown-menu {
+        min-width: 200px;
+    }
+}
